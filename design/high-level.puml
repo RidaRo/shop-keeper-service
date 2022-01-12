@@ -1,0 +1,44 @@
+@startuml
+
+'Users'
+actor Customer as customer
+actor Manager as manager
+
+'System nodes and their components'
+node "Keeper service" as keeperService {
+    component "Update product" as updateProduct
+    component "Store items" as storeItems
+    component "Product API" as productApi
+}
+
+node "Customer service" as customerService {
+    component "Product updater" as productUpdater
+    component "Search API" as searchApi
+    component "Ordering API" as orderingApi
+}
+
+'DataBases'
+database "Master data (RDS)" as masterData
+database "Items (RDS)" as items
+together {
+database "Orders (RDS)" as orders
+database "Search data (OpenSearch)" as searchData
+}
+
+'Relations between ententes'
+productApi -down-> masterData
+updateProduct --> productUpdater
+orderingApi --> orders
+searchData -- searchApi
+productUpdater -- searchData
+storeItems --> items
+
+'Relations between ententes and users'
+manager --> productApi
+manager --> updateProduct
+customer --> orderingApi
+customer --> searchApi
+customer -right-> items
+
+
+@enduml
