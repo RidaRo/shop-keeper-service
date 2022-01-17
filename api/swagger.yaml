@@ -1,0 +1,177 @@
+openapi: "3.0.2"
+info:
+  title: Shop Manager Service
+  description: Api for the shop managment
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /products:
+    description: Contains list of products
+    get:
+      description: Operation to fetch list of products
+      parameters:
+        - in: query
+          name: bodyLimit
+          required: true
+          schema:
+            type: integer
+            minimum: 10
+            maximum: 30
+            example: 10
+        - in: query
+          name: pageLimit
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+            example: 2
+      responses:
+        200:
+          description: Sucsessful pull of items info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    item name:
+                      type: string
+                      example: "broom"
+                    amount of items in stock:
+                      type: integer
+                      example: 10
+        400:
+          description: Nothing was found
+    post:
+      description: Operation to add products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  item name:
+                    type: string
+                    example: "broom"
+                  amount of items in stock:
+                    type: integer
+                    example: 10
+      responses:
+        201:
+          description: Sucsessfuly added items
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+  /products/{id}:
+    get:
+      description: Obitain informationobout spacific product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        200:
+          description: Sucsessful pull of item by id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  item name:
+                    type: string
+                    example: "broom"
+                  amount of items in stock:
+                    type: integer
+                    example: 10
+        400:
+          description: Nothing was found
+  /products/update:
+    description: Updates products
+    post:
+      description: Operation to updates varius amount of products
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  item name:
+                    type: string
+                    example: "broom"
+                  amount of items in stock:
+                    type: integer
+                    example: 10
+      responses:
+        202:
+          description: Returns all items that was changed sucsessfuly
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    item name:
+                      type: string
+                      example: "broom"
+                    amount of items in stock:
+                      type: integer
+                      example: 10
+        400:
+          description: Updated element not found
+  /products/terminate:
+    description: Deletes products
+    post:
+      description: Operation to dalete varius amount of products
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  item name:
+                    type: string
+                    example: "broom"
+                  amount of items in stock:
+                    type: integer
+                    example: 10
+      responses:
+        200:
+          description: Returns boolean value that correlates with result of operation
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        400:
+          description: Updated element not found
