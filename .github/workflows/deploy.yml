@@ -22,7 +22,7 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Create Docker image with Maven and Spring-boot
-        run: mvnw spring-boot:build-image
+        run: mvn spring-boot:build-image
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
