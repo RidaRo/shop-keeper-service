@@ -2,7 +2,7 @@ name: Deploy to ECR
 
 on:
   push:
-    branches: [ master ]
+    branches: [ bug-deploy_workflow ]
 
 jobs:
   build:
@@ -42,5 +42,4 @@ jobs:
           ECR_REPOSITORY: shop-keeper-service
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
