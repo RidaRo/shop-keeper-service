@@ -2,7 +2,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/shop-keeper-service/README.md
+/shop-keeper-infrastructure/README.md
+/shop-keeper-infrastructure/.gitignore
 
 # CDK asset staging directory
 .cdk.staging
