@@ -3,6 +3,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
 ### STS ###
 .apt_generated
 .classpath
