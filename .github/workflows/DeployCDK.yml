@@ -29,5 +29,5 @@ jobs:
       working-directory: shop-keeper-infrastructure
 
     - name: CDK Deploy
-      run: cdk deploy
+      run: cdk deploy --require-approval never
       working-directory: shop-keeper-infrastructure
