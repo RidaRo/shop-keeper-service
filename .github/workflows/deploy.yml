@@ -38,3 +38,4 @@ jobs:
         run: |
           mvn -DskipTests=true spring-boot:build-image -Dspring-boot.build-image.imageName=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        working-directory: shop-keeper-service
