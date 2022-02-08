@@ -25,4 +25,4 @@ jobs:
     - name: Build with Maven
       run: |
         cd shop-keeper-service/
-        mvn -B package --file pom.xml
+        mvn -Dspring-boot.run.profiles=local -B package --file pom.xml
