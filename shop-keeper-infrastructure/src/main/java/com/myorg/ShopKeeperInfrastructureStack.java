@@ -39,6 +39,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
         var imageTag = CfnParameter.Builder.create(this, "imageTag")
                 .type("String")
                 .description("The tag of ecr container")
+                .defaultValue("default image tag")
                 .build();
 
         postgresSecret = DatabaseSecret.Builder.create(this, "PostgresCredentials")
@@ -69,21 +70,25 @@ public class ShopKeeperInfrastructureStack extends Stack {
 
         database.getConnections().allowFromAnyIpv4(Port.tcp(5432), "Allow connections to the database");
 
+
+
         // Create a load-balanced Fargate service and make it public
         ApplicationLoadBalancedFargateService.Builder.create(this, "MyFargateService")
                 .cluster(cluster)           // Required
                 .cpu(512)                   // Default is 256
-                .desiredCount(1)            // Default is 1
+                .desiredCount(1)
+                .assignPublicIp(true)
                 .taskImageOptions(
                         ApplicationLoadBalancedTaskImageOptions.builder()
                                 .image(ContainerImage
                                         .fromEcrRepository(Repository
                                                         .fromRepositoryName(this, "EcrRepository", "shop-keeper-service"),
-                                                imageTag.getValueAsString()))
+                                                imageTag.getValueAsString())
+                                )
                                 .containerPort(8080)
                                 .environment(Map.of
                                         ("POSTGRES_HOST", database.getDbInstanceEndpointAddress(),
-                                         "POSTGRES_PORT", database.getConnections().getDefaultPort().toString(),
+                                         "POSTGRES_PORT", "5432",
                                          "POSTGRES_DATABASE", postgresDatabaseName.getValueAsString()))
                                 .secrets(Map.of
                                         ("POSTGRES_PASSWORD", Secret.fromSecretsManager(postgresSecret, "password"),
