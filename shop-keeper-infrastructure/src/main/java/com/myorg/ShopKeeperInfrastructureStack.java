@@ -92,7 +92,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
                                          "POSTGRES_DATABASE", postgresDatabaseName.getValueAsString()))
                                 .secrets(Map.of
                                         ("POSTGRES_PASSWORD", Secret.fromSecretsManager(postgresSecret, "password"),
-                                         "POSTGRES_NAME", Secret.fromSecretsManager(postgresSecret, "username")))
+                                         "POSTGRES_USER", Secret.fromSecretsManager(postgresSecret, "username")))
                                 .build())
                 .memoryLimitMiB(1024)       // Default is 512
                 .publicLoadBalancer(true)   // Default is false
