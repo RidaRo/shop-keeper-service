@@ -39,6 +39,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
         var imageTag = CfnParameter.Builder.create(this, "imageTag")
                 .type("String")
                 .description("The tag of ecr container")
+                .defaultValue("default image tag")
                 .build();
 
         postgresSecret = DatabaseSecret.Builder.create(this, "PostgresCredentials")
@@ -74,20 +75,22 @@ public class ShopKeeperInfrastructureStack extends Stack {
                 .cluster(cluster)           // Required
                 .cpu(512)                   // Default is 256
                 .desiredCount(1)            // Default is 1
+                .assignPublicIp(true)
                 .taskImageOptions(
                         ApplicationLoadBalancedTaskImageOptions.builder()
                                 .image(ContainerImage
                                         .fromEcrRepository(Repository
                                                         .fromRepositoryName(this, "EcrRepository", "shop-keeper-service"),
-                                                imageTag.getValueAsString()))
+                                                imageTag.getValueAsString())
+                                )
                                 .containerPort(8080)
                                 .environment(Map.of
                                         ("POSTGRES_HOST", database.getDbInstanceEndpointAddress(),
-                                         "POSTGRES_PORT", database.getConnections().getDefaultPort().toString(),
+                                         "POSTGRES_PORT", database.getDbInstanceEndpointPort(),
                                          "POSTGRES_DATABASE", postgresDatabaseName.getValueAsString()))
                                 .secrets(Map.of
                                         ("POSTGRES_PASSWORD", Secret.fromSecretsManager(postgresSecret, "password"),
-                                         "POSTGRES_NAME", Secret.fromSecretsManager(postgresSecret, "username")))
+                                         "POSTGRES_USER", Secret.fromSecretsManager(postgresSecret, "username")))
                                 .build())
                 .memoryLimitMiB(1024)       // Default is 512
                 .publicLoadBalancer(true)   // Default is false
