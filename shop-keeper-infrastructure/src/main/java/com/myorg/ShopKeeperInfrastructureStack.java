@@ -70,6 +70,8 @@ public class ShopKeeperInfrastructureStack extends Stack {
 
         database.getConnections().allowFromAnyIpv4(Port.tcp(5432), "Allow connections to the database");
 
+
+
         // Create a load-balanced Fargate service and make it public
         ApplicationLoadBalancedFargateService.Builder.create(this, "MyFargateService")
                 .cluster(cluster)           // Required
