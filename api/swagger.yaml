@@ -18,8 +18,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/item'
-        400:
-          description: Nothing was found
     post:
       summary: Add product
       requestBody:
@@ -35,6 +33,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/item'
+        400:
+          description: Bad requst - invalid values in request body
 
   /items/{itemCode}:
     parameters:
@@ -62,6 +62,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/item'
         400:
+          description: Bad requst - invalid values in request body
+        404:
           description: Nothing was found
 
     delete:
@@ -70,6 +72,8 @@ paths:
         200:
           description: Sucsessful deletions of item by id
         400:
+          description: Bad requst - invalid values in request body
+        404:
           description: Nothing was found
 
 components:
