@@ -1,177 +1,100 @@
-openapi: "3.0.2"
+openapi: "3.0.3"
 info:
   title: Shop Manager Service
   description: Api for the shop managment
-  version: "1.0"
+  version: "1.0.0"
+
 servers:
   - url: https://api.server.test/v1
+
 paths:
-  /products:
-    description: Contains list of products
+  /items:
     get:
-      description: Operation to fetch list of products
-      parameters:
-        - in: query
-          name: bodyLimit
-          required: true
-          schema:
-            type: integer
-            minimum: 10
-            maximum: 30
-            example: 10
-        - in: query
-          name: pageLimit
-          required: true
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 5
-            example: 2
+      summary: Fetch list of products
       responses:
         200:
           description: Sucsessful pull of items info
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    item name:
-                      type: string
-                      example: "broom"
-                    amount of items in stock:
-                      type: integer
-                      example: 10
-        400:
-          description: Nothing was found
+                $ref: '#/components/schemas/item'
     post:
-      description: Operation to add products
+      summary: Add product
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: array
-              items:
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  item name:
-                    type: string
-                    example: "broom"
-                  amount of items in stock:
-                    type: integer
-                    example: 10
-      responses:
-        201:
-          description: Sucsessfuly added items
-          content:
-            application/json:
-              schema:
-                type: boolean
-                example: true
-  /products/{id}:
-    get:
-      description: Obitain informationobout spacific product
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-            example: 10
+              $ref: '#/components/schemas/item'
       responses:
         200:
-          description: Sucsessful pull of item by id
+          description: Returns values of sucsessfuly added item
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  item name:
-                    type: string
-                    example: "broom"
-                  amount of items in stock:
-                    type: integer
-                    example: 10
+                $ref: '#/components/schemas/item'
         400:
+          description: Bad requst - invalid values in request body
+
+  /items/{itemCode}:
+    parameters:
+      - name: itemCode
+        in: path
+        required: true
+        description: ID number of item coresponding to DB
+        schema:
+          type: integer
+          example: 10
+
+    put:
+      summary: Update spacific product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/item'
+      responses:
+        200:
+          description: Returns values of sucsessfuly updayed item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/item'
+        400:
+          description: Bad requst - invalid values in request body
+        404:
           description: Nothing was found
-  /products/update:
-    description: Updates products
-    post:
-      description: Operation to updates varius amount of products
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  item name:
-                    type: string
-                    example: "broom"
-                  amount of items in stock:
-                    type: integer
-                    example: 10
-      responses:
-        202:
-          description: Returns all items that was changed sucsessfuly
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  properties:
-                    id:
-                      type: integer
-                      example: 1
-                    item name:
-                      type: string
-                      example: "broom"
-                    amount of items in stock:
-                      type: integer
-                      example: 10
-        400:
-          description: Updated element not found
-  /products/terminate:
-    description: Deletes products
-    post:
-      description: Operation to dalete varius amount of products
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  item name:
-                    type: string
-                    example: "broom"
-                  amount of items in stock:
-                    type: integer
-                    example: 10
+
+    delete:
+      summary: Delete spacific product
       responses:
         200:
-          description: Returns boolean value that correlates with result of operation
-          content:
-            application/json:
-              schema:
-                type: boolean
-                example: true
+          description: Sucsessful deletions of item by id
         400:
-          description: Updated element not found
+          description: Bad requst - invalid values in request body
+        404:
+          description: Nothing was found
+
+components:
+  schemas:
+    item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "broom"
+        price:
+          type: integer
+          example: 100
+        quantati:
+          type: integer
+          example: 10
+      required:
+        - id
+        - name
+        - price
+        - quantati

@@ -76,7 +76,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
         ApplicationLoadBalancedFargateService.Builder.create(this, "MyFargateService")
                 .cluster(cluster)           // Required
                 .cpu(512)                   // Default is 256
-                .desiredCount(1)
+                .desiredCount(1)            // Default is 1
                 .assignPublicIp(true)
                 .taskImageOptions(
                         ApplicationLoadBalancedTaskImageOptions.builder()
@@ -88,7 +88,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
                                 .containerPort(8080)
                                 .environment(Map.of
                                         ("POSTGRES_HOST", database.getDbInstanceEndpointAddress(),
-                                         "POSTGRES_PORT", "5432",
+                                         "POSTGRES_PORT", database.getDbInstanceEndpointPort(),
                                          "POSTGRES_DATABASE", postgresDatabaseName.getValueAsString()))
                                 .secrets(Map.of
                                         ("POSTGRES_PASSWORD", Secret.fromSecretsManager(postgresSecret, "password"),

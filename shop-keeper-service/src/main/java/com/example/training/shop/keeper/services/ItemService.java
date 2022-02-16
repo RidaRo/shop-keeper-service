@@ -16,7 +16,24 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public List<Item> findAll(){
+    public List<Item> findAll() {
         return itemRepository.findAll();
     }
+
+    public Item addItem(Item item) {
+        return itemRepository.save(item);
+    }
+
+    public Item updateItem(Long itemCode, Item updatedItem) {
+        if (itemRepository.findById(itemCode).isPresent()) {
+            return itemRepository.save(updatedItem);
+        } else {
+            throw new IllegalArgumentException("Item does not exist");
+        }
+    }
+
+    public void deleteItem(Long itemCode){
+        itemRepository.deleteById(itemCode);
+    }
+
 }
