@@ -1,5 +1,6 @@
 package com.example.training.shop.keeper.services;
 
+import com.example.training.shop.keeper.exceprions.ItemNotFoundException;
 import com.example.training.shop.keeper.models.Item;
 import com.example.training.shop.keeper.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,16 @@ public class ItemService {
         if (itemRepository.findById(itemCode).isPresent()) {
             return itemRepository.save(updatedItem);
         } else {
-            throw new IllegalArgumentException("Item does not exist");
+            throw new ItemNotFoundException("Item with id " + itemCode + " wasn't found ");
         }
     }
 
     public void deleteItem(Long itemCode){
-        itemRepository.deleteById(itemCode);
+        if (itemRepository.findById(itemCode).isPresent()){
+            itemRepository.deleteById(itemCode);
+        }else {
+            throw new ItemNotFoundException("Item with id " + itemCode + " wasn't found ");
+        }
     }
 
 }
