@@ -10,6 +10,7 @@ import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.Secret;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
+import software.amazon.awscdk.services.elasticloadbalancingv2.HealthCheck;
 import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.secretsmanager.ISecret;
 import software.constructs.Construct;
@@ -70,10 +71,8 @@ public class ShopKeeperInfrastructureStack extends Stack {
 
         database.getConnections().allowFromAnyIpv4(Port.tcp(5432), "Allow connections to the database");
 
-
-
         // Create a load-balanced Fargate service and make it public
-        ApplicationLoadBalancedFargateService.Builder.create(this, "MyFargateService")
+        var keeperService = ApplicationLoadBalancedFargateService.Builder.create(this, "MyFargateService")
                 .cluster(cluster)           // Required
                 .cpu(512)                   // Default is 256
                 .desiredCount(1)            // Default is 1
@@ -88,15 +87,23 @@ public class ShopKeeperInfrastructureStack extends Stack {
                                 .containerPort(8080)
                                 .environment(Map.of
                                         ("POSTGRES_HOST", database.getDbInstanceEndpointAddress(),
-                                         "POSTGRES_PORT", database.getDbInstanceEndpointPort(),
-                                         "POSTGRES_DATABASE", postgresDatabaseName.getValueAsString()))
+                                                "POSTGRES_PORT", database.getDbInstanceEndpointPort(),
+                                                "POSTGRES_DATABASE", postgresDatabaseName.getValueAsString()))
                                 .secrets(Map.of
                                         ("POSTGRES_PASSWORD", Secret.fromSecretsManager(postgresSecret, "password"),
-                                         "POSTGRES_USER", Secret.fromSecretsManager(postgresSecret, "username")))
+                                                "POSTGRES_USER", Secret.fromSecretsManager(postgresSecret, "username")))
                                 .build())
                 .memoryLimitMiB(1024)       // Default is 512
                 .publicLoadBalancer(true)   // Default is false
                 .build();
+
+        //Health check for target group using Spring Boot actuator
+        keeperService.getTargetGroup().configureHealthCheck(
+                HealthCheck.builder()
+                        .path("/actuator/health")
+                        .healthyThresholdCount(2)
+                        .unhealthyThresholdCount(5)
+                        .build());
 
     }
 }
