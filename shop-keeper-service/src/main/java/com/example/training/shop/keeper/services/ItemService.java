@@ -26,11 +26,14 @@ public class ItemService {
     }
 
     public Item updateItem(Long itemCode, Item updatedItem) {
-        if (itemRepository.findById(itemCode).isPresent()) {
-            return itemRepository.save(updatedItem);
-        } else {
-            throw new ItemNotFoundException("Item with id " + itemCode + " wasn't found ");
-        }
+        Item item = itemRepository.findById(itemCode)
+                .orElseThrow(() ->new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
+
+        item.setName(updatedItem.getName());
+        item.setQuantity(updatedItem.getQuantity());
+        item.setPrice(updatedItem.getPrice());
+
+        return itemRepository.save(item);
     }
 
     public void deleteItem(Long itemCode){
