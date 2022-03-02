@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  db:
+    image: postgres:14.1-alpine
+    container_name: postgres
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: docker_test
+  web:
+    build: .
+    container_name: web
+    ports:
+      - "8080:8080"
+#    network_mode: host
+    environment:
+#      SPRING_PROFILES_ACTIVE: local
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: docker_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    depends_on:
+      - db
