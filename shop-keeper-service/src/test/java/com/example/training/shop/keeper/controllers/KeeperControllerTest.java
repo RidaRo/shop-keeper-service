@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest
 @ActiveProfiles("test")
-public class KeeperControllerTest {
+public abstract class KeeperControllerTest {
     /////////////////////////////////////////////////////////////////////
     //// Main controller test class, every test for controllers must ////
     //// extend from it. All mocked objects should be defined here   ////

@@ -1,13 +1,9 @@
 package com.example.training.shop.keeper.services;
 
 import com.example.training.shop.keeper.models.Item;
-import com.example.training.shop.keeper.repositories.ItemRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -44,7 +40,7 @@ class ItemServiceTest {
         itemService.addItem(item);
         itemList = itemService.findAll();
         assertEquals(4, itemList.size());
-        assertEquals(item, itemList.get(3));
+        assertTrue(itemList.contains(item));
     }
 
     @Test
