@@ -25,6 +25,7 @@ class ItemServiceTest {
     void successfulFindAll() {
         List<Item> itemList = itemService.findAll();
         assertFalse(itemList.isEmpty());
+        assertEquals(3, itemList.size());
     }
 
     @Test
@@ -52,7 +53,7 @@ class ItemServiceTest {
 
         List<Item> originalItems = itemService.findAll();
 
-        Item updatedItem = itemService.updateItem(1L, item);
+        Item updatedItem = itemService.updateItem(originalItems.get(0).getId(), item);
 
         assertEquals(originalItems.size(), itemService.findAll().size());
         assertTrue(itemService.findAll().contains(updatedItem));
@@ -60,12 +61,12 @@ class ItemServiceTest {
 
     @Test
     void deleteItem() {
-        List<Item> items = itemService.findAll();
-        items.remove(0);
+        List<Item> originalItems = itemService.findAll();
 
-        itemService.deleteItem(1L);
+        itemService.deleteItem(originalItems.get(0).getId());
+        originalItems.remove(0);
 
         assertEquals(2, itemService.findAll().size());
-        assertEquals(items, itemService.findAll());
+        assertEquals(originalItems, itemService.findAll());
     }
 }
