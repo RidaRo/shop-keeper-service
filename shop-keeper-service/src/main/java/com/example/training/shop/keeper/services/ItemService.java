@@ -25,11 +25,14 @@ public class ItemService {
     }
 
     public Item updateItem(Long itemCode, Item updatedItem) {
-        if (itemRepository.findById(itemCode).isPresent()) {
-            return itemRepository.save(updatedItem);
-        } else {
-            throw new IllegalArgumentException("Item does not exist");
-        }
+        Item item = itemRepository.findById(itemCode)
+                .orElseThrow(() ->new IllegalArgumentException("Item does not exist"));
+
+        item.setName(updatedItem.getName());
+        item.setQuantity(updatedItem.getQuantity());
+        item.setPrice(updatedItem.getPrice());
+
+        return itemRepository.save(item);
     }
 
     public void deleteItem(Long itemCode){
