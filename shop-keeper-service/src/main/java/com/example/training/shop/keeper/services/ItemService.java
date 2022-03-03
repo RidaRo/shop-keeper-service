@@ -1,5 +1,6 @@
 package com.example.training.shop.keeper.services;
 
+import com.example.training.shop.keeper.exceprions.ItemNotFoundException;
 import com.example.training.shop.keeper.models.Item;
 import com.example.training.shop.keeper.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class ItemService {
 
     public Item updateItem(Long itemCode, Item updatedItem) {
         Item item = itemRepository.findById(itemCode)
-                .orElseThrow(() ->new IllegalArgumentException("Item does not exist"));
+                .orElseThrow(() ->new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
 
         item.setName(updatedItem.getName());
         item.setQuantity(updatedItem.getQuantity());
@@ -36,7 +37,11 @@ public class ItemService {
     }
 
     public void deleteItem(Long itemCode){
-        itemRepository.deleteById(itemCode);
+        if (itemRepository.findById(itemCode).isPresent()){
+            itemRepository.deleteById(itemCode);
+        }else {
+            throw new ItemNotFoundException("Item with id " + itemCode + " wasn't found ");
+        }
     }
 
 }
