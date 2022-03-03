@@ -22,4 +22,12 @@
         </createTable>
     </changeSet>
 
+    <changeSet  id="2"  author="RidaR">
+        <addColumn tableName="items">
+            <column name="code" type="java.sql.Types.BIGINT" autoIncrement="true" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

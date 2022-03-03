@@ -1,5 +1,6 @@
 package com.example.training.shop.keeper.controllers;
 
+import com.example.training.shop.keeper.dto.ItemDTO;
 import com.example.training.shop.keeper.models.Item;
 import com.example.training.shop.keeper.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +14,19 @@ public class ItemController {
 
     @GetMapping("/items")
     public @ResponseBody
-    Iterable<Item> getAllItems() {
+    Iterable<ItemDTO> getAllItems() {
         return itemService.findAll();
     }
 
     @PostMapping("/items")
     public @ResponseBody
-    Item addItem(@RequestBody Item items) {
+    ItemDTO addItem(@RequestBody Item items) {
         return itemService.addItem(items);
     }
 
     @PutMapping("/items/{itemCode}")
     public @ResponseBody
-    Item updateItem(@PathVariable Long itemCode, @RequestBody Item updatedItem) {
+    ItemDTO updateItem(@PathVariable Long itemCode, @RequestBody Item updatedItem) {
         return itemService.updateItem(itemCode, updatedItem);
     }
 

@@ -1,12 +1,14 @@
 package com.example.training.shop.keeper.services;
 
-import com.example.training.shop.keeper.exceprions.ItemNotFoundException;
+import com.example.training.shop.keeper.dto.ItemDTO;
+import com.example.training.shop.keeper.exceptions.ItemNotFoundException;
 import com.example.training.shop.keeper.models.Item;
 import com.example.training.shop.keeper.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -17,31 +19,41 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public List<Item> findAll() {
-        return itemRepository.findAll();
+    public List<ItemDTO> findAll() {
+        return itemRepository.findAll()
+                .stream()
+                .map(this::convertEntityToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Item addItem(Item item) {
-        return itemRepository.save(item);
+    public ItemDTO addItem(Item item) {
+        return convertEntityToDTO(itemRepository.save(item));
     }
 
-    public Item updateItem(Long itemCode, Item updatedItem) {
-        Item item = itemRepository.findById(itemCode)
-                .orElseThrow(() ->new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
+    public ItemDTO updateItem(Long itemCode, Item updatedItem) {
+        Item item = itemRepository.findByCode(itemCode)
+                .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
 
         item.setName(updatedItem.getName());
         item.setQuantity(updatedItem.getQuantity());
         item.setPrice(updatedItem.getPrice());
 
-        return itemRepository.save(item);
+        return convertEntityToDTO(itemRepository.save(item));
     }
 
-    public void deleteItem(Long itemCode){
-        if (itemRepository.findById(itemCode).isPresent()){
-            itemRepository.deleteById(itemCode);
-        }else {
-            throw new ItemNotFoundException("Item with id " + itemCode + " wasn't found ");
-        }
+    public void deleteItem(Long itemCode) {
+        Item item = itemRepository.findByCode(itemCode)
+                .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
+        itemRepository.delete(item);
+    }
+
+    public ItemDTO convertEntityToDTO(Item item) {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setCode(item.getCode());
+        itemDTO.setName(item.getName());
+        itemDTO.setPrice(itemDTO.getPrice());
+        itemDTO.setQuantity(itemDTO.getQuantity());
+        return itemDTO;
     }
 
 }

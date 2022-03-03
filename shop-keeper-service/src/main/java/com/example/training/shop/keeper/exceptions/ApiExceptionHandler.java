@@ -1,4 +1,4 @@
-package com.example.training.shop.keeper.exceprions;
+package com.example.training.shop.keeper.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,9 @@ import java.time.ZonedDateTime;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {ItemNotFoundException.class})
-    public ResponseEntity<Object> handleApiNotFoundException(ItemNotFoundException e){
+    public ResponseEntity<Object> handleApiNotFoundException(ItemNotFoundException e) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
-        ApiException apiException = new ApiException(
+        ApiExceptionTemplate apiException = new ApiExceptionTemplate(
                 e.getMessage(),
                 notFound,
                 ZonedDateTime.now(ZoneId.of("GMT+3"))
