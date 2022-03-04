@@ -1,5 +1,6 @@
 package com.myorg;
 
+import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.CfnParameter;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
@@ -13,12 +14,13 @@ import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskI
 import software.amazon.awscdk.services.elasticloadbalancingv2.HealthCheck;
 import software.amazon.awscdk.services.rds.*;
 import software.amazon.awscdk.services.secretsmanager.ISecret;
+import software.amazon.awscdk.services.sns.ITopic;
+import software.amazon.awscdk.services.sns.Topic;
 import software.constructs.Construct;
 
 import java.util.Map;
 
 public class ShopKeeperInfrastructureStack extends Stack {
-    private final ISecret postgresSecret;
 
     public ShopKeeperInfrastructureStack(final Construct scope, final String id) {
         this(scope, id, null);
@@ -43,7 +45,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
                 .defaultValue("default image tag")
                 .build();
 
-        postgresSecret = DatabaseSecret.Builder.create(this, "PostgresCredentials")
+        ISecret postgresSecret = DatabaseSecret.Builder.create(this, "PostgresCredentials")
                 .username(postgresUsername.getValueAsString())
                 .build();
 
@@ -55,6 +57,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
         Cluster cluster = Cluster.Builder.create(this, "MyCluster")
                 .vpc(vpc).build();
 
+        // RDS
         var database = DatabaseInstance.Builder.create(this, "Postgres")
                 .engine(DatabaseInstanceEngine.postgres(
                                 PostgresInstanceEngineProps.builder()
@@ -71,7 +74,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
 
         database.getConnections().allowFromAnyIpv4(Port.tcp(5432), "Allow connections to the database");
 
-        // Create a load-balanced Fargate service and make it public
+        // Fargate
         var keeperService = ApplicationLoadBalancedFargateService.Builder.create(this, "MyFargateService")
                 .cluster(cluster)           // Required
                 .cpu(512)                   // Default is 256
@@ -97,7 +100,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
                 .publicLoadBalancer(true)   // Default is false
                 .build();
 
-        //Health check for target group using Spring Boot actuator
+        // Health check for target group using Spring Boot actuator
         keeperService.getTargetGroup().configureHealthCheck(
                 HealthCheck.builder()
                         .path("/actuator/health")
@@ -105,5 +108,16 @@ public class ShopKeeperInfrastructureStack extends Stack {
                         .unhealthyThresholdCount(5)
                         .build());
 
+        // SNS
+
+        ITopic topic = Topic.Builder.create(this, "ItemsUpdates")
+                .fifo(true)
+                .topicName("item-updates.fifo")
+                .build();
+
+        CfnOutput.Builder.create(this, "ItemsUpdateTopic")
+                .description("Item update topic")
+                .value(topic.getTopicArn())
+                .build();
     }
 }
