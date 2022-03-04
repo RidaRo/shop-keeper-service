@@ -13,8 +13,6 @@ import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedFarga
 import software.amazon.awscdk.services.ecs.patterns.ApplicationLoadBalancedTaskImageOptions;
 import software.amazon.awscdk.services.elasticloadbalancingv2.HealthCheck;
 import software.amazon.awscdk.services.rds.*;
-import software.amazon.awscdk.services.secretsmanager.ISecret;
-import software.amazon.awscdk.services.sns.ITopic;
 import software.amazon.awscdk.services.sns.Topic;
 import software.constructs.Construct;
 
@@ -45,11 +43,11 @@ public class ShopKeeperInfrastructureStack extends Stack {
                 .defaultValue("default image tag")
                 .build();
 
-        ISecret postgresSecret = DatabaseSecret.Builder.create(this, "PostgresCredentials")
+        var postgresSecret = DatabaseSecret.Builder.create(this, "PostgresCredentials")
                 .username(postgresUsername.getValueAsString())
                 .build();
 
-        Vpc vpc = Vpc.Builder.create(this, "MyVpc")
+        var vpc = Vpc.Builder.create(this, "MyVpc")
                 .maxAzs(2)  // Default is all AZs in region
                 .subnetConfiguration(Vpc.DEFAULT_SUBNETS_NO_NAT)
                 .build();
@@ -109,8 +107,7 @@ public class ShopKeeperInfrastructureStack extends Stack {
                         .build());
 
         // SNS
-
-        ITopic topic = Topic.Builder.create(this, "ItemsUpdates")
+        var topic = Topic.Builder.create(this, "ItemsUpdates")
                 .fifo(true)
                 .topicName("item-updates.fifo")
                 .build();
