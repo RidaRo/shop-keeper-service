@@ -19,8 +19,8 @@ public class SNSConfig {
 
     public SNSConfig(
             @Value("${aws.region}") String regionName,
-            @Value("${aws.sns.topic}") String awsEndpoint,
-            @Value("${aws.endpoint}") String topicARN){
+            @Value("${aws.sns.topic}") String topicARN,
+            @Value("${aws.endpoint}") String awsEndpoint){
         this.awsEndpoint = awsEndpoint;
         this.regionName = regionName;
         this.topicARN = topicARN;
@@ -30,7 +30,7 @@ public class SNSConfig {
     public SnsClient snsClient(){
         SubscribeRequest request = SubscribeRequest.builder()
                 .protocol("sqs")
-                .endpoint("")
+                .endpoint("http://localhost:7000/000000000000/item-updates")
                 .returnSubscriptionArn(true)
                 .topicArn(topicARN)
                 .build();
