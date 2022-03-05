@@ -6,9 +6,9 @@ services:
     ports:
       - "5434:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: docker_test
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: local
+      POSTGRES_DB: local
 
   localstack:
     image: localstack/localstack:0.13.2

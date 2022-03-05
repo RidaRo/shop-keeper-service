@@ -13,16 +13,16 @@ import java.net.URI;
 @Configuration
 public class SNSConfig {
 
-    private final String regionName;
+    private final String region;
     private final String awsEndpoint;
     private final String topicARN;
 
     public SNSConfig(
-            @Value("${aws.region}") String regionName,
+            @Value("${aws.region}") String region,
             @Value("${aws.sns.topic}") String topicARN,
             @Value("${aws.endpoint}") String awsEndpoint){
         this.awsEndpoint = awsEndpoint;
-        this.regionName = regionName;
+        this.region = region;
         this.topicARN = topicARN;
     }
 
@@ -37,7 +37,7 @@ public class SNSConfig {
 
         SnsClient snsClient = SnsClient.builder()
                 .endpointOverride(URI.create(awsEndpoint))
-                .region(Region.of(regionName))
+                .region(Region.of(region))
                 .build();
         snsClient.subscribe(request);
 
