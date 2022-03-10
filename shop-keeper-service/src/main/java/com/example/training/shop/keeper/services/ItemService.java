@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -26,7 +25,7 @@ public class ItemService {
         return itemRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ItemDTO addItem(Item item) {
@@ -42,7 +41,7 @@ public class ItemService {
         item.setQuantity(updatedItem.getQuantity());
         item.setPrice(updatedItem.getPrice());
 
-        snsPublisher.publishTopic(itemCode.toString());
+        snsPublisher.publishTopic(item.getCode().toString());
         return convertEntityToDTO(itemRepository.save(item));
     }
 
