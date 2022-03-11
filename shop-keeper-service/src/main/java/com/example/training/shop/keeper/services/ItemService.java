@@ -47,7 +47,7 @@ public class ItemService {
         logger.info("Updating item with code [item={}, code{}]", updatedItem, itemCode);
 
         Item item = itemRepository.findByCode(itemCode)
-                .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
+                .orElseThrow(() -> new ItemNotFoundException("Item with code " + itemCode + " wasn't found "));
 
         item.setName(updatedItem.getName());
         item.setQuantity(updatedItem.getQuantity());
@@ -65,7 +65,7 @@ public class ItemService {
         logger.info("Deleting item by code [code={}]", itemCode);
 
         Item item = itemRepository.findByCode(itemCode)
-                .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemCode + " wasn't found "));
+                .orElseThrow(() -> new ItemNotFoundException("Item with code " + itemCode + " wasn't found "));
         itemRepository.delete(item);
 
         logger.info("Deleted item [item={}]", item);
