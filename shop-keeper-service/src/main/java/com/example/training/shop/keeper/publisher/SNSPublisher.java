@@ -31,6 +31,7 @@ public class SNSPublisher {
                 .messageDeduplicationId(code)
                 .build();
         PublishResponse publishResponse = snsClient.publish(request);
+
         String responseMassageId = publishResponse.messageId();
         int responseHttpStatusCode = publishResponse.sdkHttpResponse().statusCode();
         logger.info("{} Message sent. Status is {}", responseMassageId, responseHttpStatusCode);
