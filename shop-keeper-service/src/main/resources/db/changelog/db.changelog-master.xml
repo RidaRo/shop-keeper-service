@@ -30,4 +30,13 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="3" author="RidaR">
+        <dropColumn tableName="items" columnName="code"/>
+        <addColumn tableName="items">
+            <column name="code" type="java.util.UUID">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

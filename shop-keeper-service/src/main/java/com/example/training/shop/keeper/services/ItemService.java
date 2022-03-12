@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ItemService {
@@ -43,7 +44,7 @@ public class ItemService {
         return convertEntityToDTO(savedItem);
     }
 
-    public ItemDTO updateItem(Long itemCode, Item updatedItem) {
+    public ItemDTO updateItem(UUID itemCode, Item updatedItem) {
         logger.info("Updating item with code [item={}, code{}]", updatedItem, itemCode);
 
         Item item = itemRepository.findByCode(itemCode)
@@ -61,7 +62,7 @@ public class ItemService {
         return convertEntityToDTO(newItem);
     }
 
-    public void deleteItem(Long itemCode) {
+    public void deleteItem(UUID itemCode) {
         logger.info("Deleting item by code [code={}]", itemCode);
 
         Item item = itemRepository.findByCode(itemCode)
@@ -77,8 +78,8 @@ public class ItemService {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setCode(item.getCode());
         itemDTO.setName(item.getName());
-        itemDTO.setPrice(itemDTO.getPrice());
-        itemDTO.setQuantity(itemDTO.getQuantity());
+        itemDTO.setPrice(item.getPrice());
+        itemDTO.setQuantity(item.getQuantity());
 
         logger.debug("Converted item to itemDTO [itemDTO={}]", itemDTO);
 

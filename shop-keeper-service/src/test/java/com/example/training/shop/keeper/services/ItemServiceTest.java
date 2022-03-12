@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +37,7 @@ class ItemServiceTest {
         assertEquals(3, itemList.size());
 
         Item item = new Item();
-        item.setCode(31L);
+        item.setCode(UUID.randomUUID());
         item.setName("testItem");
         item.setPrice(new BigDecimal(10));
         item.setQuantity(1L);
@@ -67,9 +68,8 @@ class ItemServiceTest {
         List<ItemDTO> originalItems = itemService.findAll();
 
         itemService.deleteItem(originalItems.get(0).getCode());
-        originalItems.remove(0);
 
         assertEquals(2, itemService.findAll().size());
-        assertEquals(originalItems, itemService.findAll());
+        assertNotEquals(originalItems, itemService.findAll());
     }
 }
