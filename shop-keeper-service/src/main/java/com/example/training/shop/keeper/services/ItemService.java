@@ -21,12 +21,6 @@ public class ItemService {
     private SNSPublisher snsPublisher;
 
     @Autowired
-    private SNSPublisher snsPublisher;
-
-    @Autowired
-    private SNSPublisher snsPublisher;
-
-    @Autowired
     public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
