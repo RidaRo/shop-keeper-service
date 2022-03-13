@@ -17,6 +17,11 @@ import java.util.UUID;
 public class ItemService {
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
     private final ItemRepository itemRepository;
+    @Autowired
+    private SNSPublisher snsPublisher;
+
+    @Autowired
+    private SNSPublisher snsPublisher;
 
     @Autowired
     private SNSPublisher snsPublisher;
@@ -62,6 +67,7 @@ public class ItemService {
         return convertEntityToDTO(newItem);
     }
 
+
     public void deleteItem(UUID itemCode) {
         logger.info("Deleting item by code [code={}]", itemCode);
 
@@ -80,6 +86,7 @@ public class ItemService {
         itemDTO.setName(item.getName());
         itemDTO.setPrice(item.getPrice());
         itemDTO.setQuantity(item.getQuantity());
+
 
         logger.debug("Converted item to itemDTO [itemDTO={}]", itemDTO);
 
