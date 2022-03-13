@@ -67,9 +67,8 @@ class ItemServiceTest {
         List<ItemDTO> originalItems = itemService.findAll();
 
         itemService.deleteItem(originalItems.get(0).getCode());
-        originalItems.remove(0);
 
         assertEquals(2, itemService.findAll().size());
-        assertEquals(originalItems, itemService.findAll());
+        assertNotEquals(originalItems, itemService.findAll());
     }
 }

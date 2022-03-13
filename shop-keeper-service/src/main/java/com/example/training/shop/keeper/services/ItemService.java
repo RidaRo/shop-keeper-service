@@ -16,6 +16,8 @@ import java.util.List;
 public class ItemService {
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
     private final ItemRepository itemRepository;
+    @Autowired
+    private SNSPublisher snsPublisher;
 
     @Autowired
     private SNSPublisher snsPublisher;
@@ -33,6 +35,7 @@ public class ItemService {
     }
 
     public ItemDTO addItem(Item item) {
+
         logger.info("Adding new item [item={}]", item);
 
         snsPublisher.publishTopic(item.getCode().toString());
