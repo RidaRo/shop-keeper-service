@@ -15,10 +15,6 @@ jobs:
       AWS_ACCESS_KEY_ID: FAKE
       AWS_SECRET_ACCESS_KEY: FAKE
 
-    env:
-      AWS_ACCESS_KEY_ID: FAKE
-      AWS_SECRET_ACCESS_KEY: FAKE
-
     runs-on: ubuntu-latest
 
     steps:

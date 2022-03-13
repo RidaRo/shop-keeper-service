@@ -11,14 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ItemService {
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
     private final ItemRepository itemRepository;
-    @Autowired
-    private SNSPublisher snsPublisher;
-
     @Autowired
     private SNSPublisher snsPublisher;
 
@@ -35,7 +33,6 @@ public class ItemService {
     }
 
     public ItemDTO addItem(Item item) {
-
         logger.info("Adding new item [item={}]", item);
 
         snsPublisher.publishTopic(item.getCode().toString());
@@ -46,7 +43,7 @@ public class ItemService {
         return convertEntityToDTO(savedItem);
     }
 
-    public ItemDTO updateItem(Long itemCode, Item updatedItem) {
+    public ItemDTO updateItem(UUID itemCode, Item updatedItem) {
         logger.info("Updating item with code [item={}, code{}]", updatedItem, itemCode);
 
         Item item = itemRepository.findByCode(itemCode)
@@ -64,7 +61,8 @@ public class ItemService {
         return convertEntityToDTO(newItem);
     }
 
-    public void deleteItem(Long itemCode) {
+
+    public void deleteItem(UUID itemCode) {
         logger.info("Deleting item by code [code={}]", itemCode);
 
         Item item = itemRepository.findByCode(itemCode)
@@ -80,8 +78,9 @@ public class ItemService {
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setCode(item.getCode());
         itemDTO.setName(item.getName());
-        itemDTO.setPrice(itemDTO.getPrice());
-        itemDTO.setQuantity(itemDTO.getQuantity());
+        itemDTO.setPrice(item.getPrice());
+        itemDTO.setQuantity(item.getQuantity());
+
 
         logger.debug("Converted item to itemDTO [itemDTO={}]", itemDTO);
 
