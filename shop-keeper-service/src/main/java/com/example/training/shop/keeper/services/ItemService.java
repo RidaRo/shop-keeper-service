@@ -3,16 +3,18 @@ package com.example.training.shop.keeper.services;
 import com.example.training.shop.keeper.dto.ItemDTO;
 import com.example.training.shop.keeper.exceptions.ItemNotFoundException;
 import com.example.training.shop.keeper.models.Item;
+import com.example.training.shop.keeper.publisher.SNSPublisher;
 import com.example.training.shop.keeper.repositories.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
     private final ItemRepository itemRepository;
+    @Autowired
+    private SNSPublisher snsPublisher;
 
     @Autowired
     public ItemService(ItemRepository itemRepository) {
@@ -23,10 +25,11 @@ public class ItemService {
         return itemRepository.findAll()
                 .stream()
                 .map(this::convertEntityToDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public ItemDTO addItem(Item item) {
+        snsPublisher.publishTopic(item.getCode().toString());
         return convertEntityToDTO(itemRepository.save(item));
     }
 
@@ -38,6 +41,7 @@ public class ItemService {
         item.setQuantity(updatedItem.getQuantity());
         item.setPrice(updatedItem.getPrice());
 
+        snsPublisher.publishTopic(item.getCode().toString());
         return convertEntityToDTO(itemRepository.save(item));
     }
 

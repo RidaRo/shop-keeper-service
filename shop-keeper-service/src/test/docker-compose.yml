@@ -8,3 +8,21 @@ services:
       POSTGRES_PASSWORD: test
       POSTGRES_USER: test
       POSTGRES_DB: test
+
+  localstack:
+    image: localstack/localstack:0.13.2
+    ports:
+      - "7000:4566"
+      - "17000:4571"
+    environment:
+      - SERVICES=sns
+      - DATA_DIR=/data/localstack
+      - HOST_TMP_FOLDER=/tmp/localstack
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - EAGER_SERVICE_LOADING=tue
+
+  awsinit:
+    depends_on:
+      - localstack
+    build:
+      context: ../../../docker/aws

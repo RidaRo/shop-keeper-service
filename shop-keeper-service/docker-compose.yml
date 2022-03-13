@@ -6,21 +6,24 @@ services:
     ports:
       - "5434:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: docker_test
-  web:
-    build: .
-    container_name: web
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: local
+      POSTGRES_DB: local
+
+  localstack:
+    image: localstack/localstack:0.13.2
     ports:
-      - "8080:8080"
-#    network_mode: host
+      - "7000:4566"
+      - "17000:4571"
     environment:
-#      SPRING_PROFILES_ACTIVE: local
-      POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
-      POSTGRES_DATABASE: docker_test
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      - SERVICES=sns
+      - DATA_DIR=/data/localstack
+      - HOST_TMP_FOLDER=/tmp/localstack
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - EAGER_SERVICE_LOADING=tue
+
+  awsinit:
     depends_on:
-      - db
+      - localstack
+    build:
+      context: ../docker/aws
