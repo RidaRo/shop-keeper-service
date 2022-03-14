@@ -14,15 +14,12 @@ public class SNSConfig {
 
     private final String region;
     private final String awsEndpoint;
-    private final String topicARN;
 
     public SNSConfig(
             @Value("${aws.region}") String region,
-            @Value("${aws.sns.topic}") String topicARN,
             @Value("${aws.endpoint}") String awsEndpoint){
         this.awsEndpoint = awsEndpoint;
         this.region = region;
-        this.topicARN = topicARN;
     }
 
     @Bean

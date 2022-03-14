@@ -17,12 +17,12 @@ import java.util.UUID;
 public class ItemService {
     private static final Logger logger = LoggerFactory.getLogger(ItemService.class);
     private final ItemRepository itemRepository;
-    @Autowired
-    private SNSPublisher snsPublisher;
+    private final SNSPublisher snsPublisher;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, SNSPublisher snsPublisher) {
         this.itemRepository = itemRepository;
+        this.snsPublisher = snsPublisher;
     }
 
     public List<ItemDTO> findAll() {

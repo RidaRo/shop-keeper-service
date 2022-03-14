@@ -10,30 +10,30 @@ import java.util.UUID;
 
 @Controller
 public class ItemController {
+    private final ItemService itemService;
+
     @Autowired
-    private ItemService itemService;
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
 
     @GetMapping("/items")
-    public @ResponseBody
-    Iterable<ItemDTO> getAllItems() {
+    public @ResponseBody Iterable<ItemDTO> getAllItems() {
         return itemService.findAll();
     }
 
     @PostMapping("/items")
-    public @ResponseBody
-    ItemDTO addItem(@RequestBody ItemDTO itemDTO) {
+    public @ResponseBody ItemDTO addItem(@RequestBody ItemDTO itemDTO) {
         return itemService.addItem(itemDTO.convertDTOToItem());
     }
 
     @PutMapping("/items/{itemCode}")
-    public @ResponseBody
-    ItemDTO updateItem(@PathVariable UUID itemCode, @RequestBody ItemDTO updatedItemDTO) {
+    public @ResponseBody ItemDTO updateItem(@PathVariable UUID itemCode, @RequestBody ItemDTO updatedItemDTO) {
         return itemService.updateItem(itemCode, updatedItemDTO.convertDTOToItem());
     }
 
     @DeleteMapping("/items/{itemCode}")
-    public @ResponseBody
-    void deleteItem(@PathVariable UUID itemCode) {
+    public @ResponseBody void deleteItem(@PathVariable UUID itemCode) {
         itemService.deleteItem(itemCode);
     }
 
