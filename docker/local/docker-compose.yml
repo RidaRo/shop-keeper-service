@@ -1,13 +1,14 @@
-version: "3.9"
+version: '3.3'
 services:
-  testDB:
-    image: postgres:14.2-alpine
+  db:
+    image: postgres:14.1-alpine
+    container_name: postgres
     ports:
-      - 5435:5432
+      - "5434:5432"
     environment:
-      POSTGRES_PASSWORD: test
-      POSTGRES_USER: test
-      POSTGRES_DB: test
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: local
+      POSTGRES_DB: local
 
   localstack:
     image: localstack/localstack:0.13.2
@@ -15,14 +16,14 @@ services:
       - "7000:4566"
       - "17000:4571"
     environment:
-      - SERVICES=sns
+      - SERVICES=sns,sqs
       - DATA_DIR=/data/localstack
       - HOST_TMP_FOLDER=/tmp/localstack
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - EAGER_SERVICE_LOADING=tue
+      - EAGER_SERVICE_LOADING=true
 
   awsinit:
     depends_on:
       - localstack
     build:
-      context: ../../../docker/aws
+      context: ../aws

@@ -22,6 +22,11 @@ public class ItemController {
         return itemService.findAll();
     }
 
+    @GetMapping("/items/{itemCode}")
+    public @ResponseBody ItemDTO getAllItems(@PathVariable UUID itemCode) {
+        return itemService.findByCode(itemCode);
+    }
+
     @PostMapping("/items")
     public @ResponseBody ItemDTO addItem(@RequestBody ItemDTO itemDTO) {
         return itemService.addItem(itemDTO.convertDTOToItem());
