@@ -29,7 +29,7 @@ jobs:
 
     - name: Start containers
       run: docker-compose up --build -d
-      working-directory: shop-keeper-service/src/test/
+      working-directory: docker/tests/
 
     - name: Build with Maven
       run: mvn -Dspring-boot.run.profiles=test -B package --file pom.xml
