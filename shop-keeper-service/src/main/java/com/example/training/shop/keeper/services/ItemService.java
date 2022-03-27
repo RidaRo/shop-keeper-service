@@ -32,6 +32,12 @@ public class ItemService {
                 .toList();
     }
 
+    public ItemDTO findByCode(UUID itemCode){
+        Item item = itemRepository.findByCode(itemCode)
+                .orElseThrow(() -> new ItemNotFoundException("Item with code " + itemCode + " wasn't found "));
+        return convertEntityToDTO(item);
+    }
+
     public ItemDTO addItem(Item item) {
         logger.info("Adding new item [item={}]", item);
 

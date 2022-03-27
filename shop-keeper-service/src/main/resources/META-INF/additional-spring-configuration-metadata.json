@@ -1,0 +1,43 @@
+{
+  "properties": [
+    {
+      "name": "postgres.host",
+      "type": "java.lang.String",
+      "description": "Description for postgres.host."
+    },
+    {
+      "name": "postgres.port",
+      "type": "java.lang.String",
+      "description": "Description for postgres.port."
+    },
+    {
+      "name": "postgres.database",
+      "type": "java.lang.String",
+      "description": "Description for postgres.database."
+    },
+    {
+      "name": "postgres.user",
+      "type": "java.lang.String",
+      "description": "Description for postgres.user."
+    },
+    {
+      "name": "postgres.password",
+      "type": "java.lang.String",
+      "description": "Description for postgres.password."
+    },
+    {
+      "name": "aws.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for aws.endpoint."
+    },
+    {
+      "name": "aws.region",
+      "type": "java.lang.String",
+      "description": "Description for aws.region."
+    },
+    {
+      "name": "aws.sns.topic",
+      "type": "java.lang.String",
+      "description": "Description for aws.sns.topic."
+    }
+  ] }
